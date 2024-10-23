@@ -12,3 +12,11 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+model Budget {
+  titleId Int @id @default(autoincrement()) @unique
+  title    String  @map("Title")
+  quantity Int     @map("Quantity")
+  price    Decimal @map("Price")
+
+  @@map("budget_tracker")
+}

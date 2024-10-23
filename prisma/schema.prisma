@@ -14,7 +14,7 @@ datasource db {
 }
 model Budget {
   titleId Int @id @default(autoincrement()) @unique
-  title    String  @map("Title")
+  title    String  @map("Title") @unique
   quantity Int     @map("Quantity")
   price    Decimal @map("Price")
 

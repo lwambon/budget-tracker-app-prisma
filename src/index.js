@@ -17,14 +17,38 @@ app.post("/budget", async (req, res) => {
 });
 
 //getting all the budgets
-app.get("/budget", (req, res) => {
-  res.send("getting a budget list");
+app.get("/budget", async (req, res) => {
+  try {
+    const allBudget = await client.budget.findMany();
+    if (allBudget.length <= 0) {
+      res.status(204).json({ message: "no budget available" });
+    } else res.status(200).json({ data: allBudget });
+  } catch (e) {
+    res.status(500).json({ message: "server error" });
+  }
 });
 
 //getting one budget
-app.get("/budget/:title", (req, res) => {
-  res.send("getting one  budget list");
+app.get("/budget/:title", async (req, res) => {
+  const titleParam = req.params.title;
+  try {
+    const budget = await client.budget.findFirst({
+      where: { title: titleParam },
+    });
+
+    if (!budget) {
+      return res
+        .status(404)
+        .json({ message: `Budget with title "${titleParam}" not found` });
+    }
+
+    res.status(200).json({ data: budget });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ message: "Server error", details: e.message });
+  }
 });
+
 //updating the bugdet list
 app.patch("/budget", (req, res) => {
   res.send("updating one  budget list");

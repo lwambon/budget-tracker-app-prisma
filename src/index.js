@@ -50,12 +50,54 @@ app.get("/budget/:title", async (req, res) => {
 });
 
 //updating the bugdet list
-app.patch("/budget", (req, res) => {
-  res.send("updating one  budget list");
+app.patch("/budget/:title", async (req, res) => {
+  const wantedTitle = req.params.title;
+  const { titleId, title, quantity, price } = req.body;
+  try {
+    let updatedBudget;
+    if (titleId) {
+      updatedBudget = await client.budget.update({
+        where: { title: wantedTitle },
+        data: { titleId: titleId },
+      });
+    }
+    if (title) {
+      updatedBudget = await client.budget.update({
+        where: { title: wantedTitle },
+        data: { title: title },
+      });
+    }
+    if (quantity) {
+      updatedBudget = await client.budget.update({
+        where: { title: wantedTitle },
+        data: { quantity: quantity },
+      });
+    }
+    if (price) {
+      updatedBudget = await client.budget.update({
+        where: { title: wantedTitle },
+        data: { price: price },
+      });
+    }
+    res
+      .status(200)
+      .json({ message: "budget updated successfully", data: updatedBudget });
+  } catch (e) {
+    res.status(500).json({ message: "server error" });
+  }
 });
+
 //deleting a budget list
-app.delete("/budget", (req, res) => {
-  res.send("deleting one  budget list");
+app.delete("/budget/:title", async (req, res) => {
+  const titleParam = req.params.title;
+  try {
+    await client.budget.delete({
+      where: { title: titleParam },
+    });
+    res.status(200).json({ message: "budget  deleted successfully" });
+  } catch (e) {
+    res.status(500).json({ message: "server error" });
+  }
 });
 
 app.listen(3000, () => {

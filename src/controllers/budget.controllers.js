@@ -55,25 +55,25 @@ const updateBuget = async (req, res) => {
     if (titleId) {
       updatedBudget = await client.budget.update({
         where: { title: wantedTitle },
-        data: { titleId: titleId },
+        data: { titleId },
       });
     }
     if (title) {
       updatedBudget = await client.budget.update({
         where: { title: wantedTitle },
-        data: { title: title },
+        data: { title },
       });
     }
     if (quantity) {
       updatedBudget = await client.budget.update({
         where: { title: wantedTitle },
-        data: { quantity: quantity },
+        data: { quantity },
       });
     }
     if (price) {
       updatedBudget = await client.budget.update({
         where: { title: wantedTitle },
-        data: { price: price },
+        data: { price },
       });
     }
     res
